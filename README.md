@@ -91,7 +91,7 @@ The completed application displays the cloud deployment landing page, technology
 
 ### 3.3 AWS Network Architecture Topology
 
-![AWS Network Architecture Topology](screenshots/React-App-Topology.png)
+![AWS Network Architecture Topology](screenshots/React-App-Topology.jpg)
 
 The architecture diagram illustrates the deployment flow and the AWS infrastructure components involved in hosting the application.
 
