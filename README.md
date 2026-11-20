@@ -33,25 +33,26 @@ The application features a responsive webpage displaying the technologies used a
 | npm | Dependency management and application scripts |
 | AWS Elastic Beanstalk | Application deployment and environment management |
 | Amazon EC2 | Compute infrastructure hosting the application |
-| Amazon S3 | Stores Elastic Beanstalk application versions and deployment bundles |
 | AWS IAM | Manages permissions for Elastic Beanstalk and EC2 |
+
+**AWS-managed supporting service:** Amazon S3 is used internally by Elastic Beanstalk to store application versions and deployment bundles. It was not independently configured as part of this project.
 
 ### Architecture
 
 ```text
                  User / Web Browser
                          |
-                         |
-                  HTTP Application URL
+                         v
+                Elastic Beanstalk URL
                          |
                          v
-              AWS Elastic Beanstalk
+               AWS Elastic Beanstalk
                          |
                          v
-                   Amazon EC2
+                    Amazon EC2
                          |
                          v
-                  Node.js Server
+                   Node.js Server
                     (Express.js)
                          |
                          v
@@ -59,11 +60,12 @@ The application features a responsive webpage displaying the technologies used a
                     Build Files
                          |
                          v
-                  Rendered Webpage
+                   Rendered Webpage
 ```
 
-**Deployment configuration:**
-- AWS Region: Asia Pacific (Singapore) - ap-southeast-1
+### Deployment configuration
+
+- AWS Region: Asia Pacific (Singapore) - `ap-southeast-1`
 - Environment tier: Web server environment
 - Platform: Node.js on Amazon Linux 2023
 - Environment type: Single instance
@@ -71,7 +73,29 @@ The application features a responsive webpage displaying the technologies used a
 - Load balancer: Not configured
 - Database: Not configured
 
-## 3. Prerequisites
+## 3. Project Screenshots
+
+The following screenshots demonstrate the successful deployment, final application interface, and overall cloud architecture.
+
+### 3.1 Successful AWS Elastic Beanstalk Deployment
+
+![Successful Elastic Beanstalk Deployment](screenshots/deployment-success.png)
+
+The deployment history shows that the application deployment completed successfully.
+
+### 3.2 Deployed React Web Application
+
+![Deployed React Web Application](screenshots/cloud-application.png)
+
+The completed application displays the cloud deployment landing page, technology stack, deployment information, and author credit.
+
+### 3.3 AWS Network Architecture Topology
+
+![AWS Network Architecture Topology](screenshots/React-App-Topology.png)
+
+The architecture diagram illustrates the deployment flow and the AWS infrastructure components involved in hosting the application.
+
+## 4. Prerequisites
 
 Before starting, ensure the following tools and access are available:
 
@@ -93,7 +117,7 @@ npm.cmd --version
 
 **Note:** On Windows PowerShell, `npm` may be blocked by the PowerShell execution policy because it invokes `npm.ps1`. Using `npm.cmd` and `npx.cmd` avoids the need to modify the execution policy.
 
-## 4. Create the React Application
+## 5. Create the React Application
 
 ### Step 1: Create the project directory
 
@@ -111,11 +135,7 @@ Execute:
 npx.cmd create-react-app@latest react-eb-app
 ```
 
-If prompted to continue with the installation, enter:
-
-```text
-y
-```
+If prompted to continue with the installation, enter `y`.
 
 Wait for the installation to complete.
 
@@ -139,7 +159,7 @@ http://localhost:3000
 
 The default Create React App webpage should appear.
 
-## 5. Customize the React Application
+## 6. Customize the React Application
 
 The application frontend was customized to provide a modern, responsive cloud deployment landing page.
 
@@ -196,7 +216,7 @@ Configure the global styling, including:
 
 Save all changes.
 
-## 6. Configure Node.js and Express.js
+## 7. Configure Node.js and Express.js
 
 AWS Elastic Beanstalk uses Node.js to run the application.
 
@@ -212,11 +232,7 @@ npm.cmd install express
 
 ### Step 2: Create server.js
 
-Create a new file named:
-
-```text
-server.js
-```
+Create a new file named `server.js` in the project root directory.
 
 Add the following code:
 
@@ -252,13 +268,7 @@ app.listen(PORT, '0.0.0.0', () => {
 
 ### Step 3: Update package.json
 
-Open:
-
-```text
-package.json
-```
-
-Update the scripts section:
+Open `package.json` and update the scripts section:
 
 ```json
 "scripts": {
@@ -308,17 +318,13 @@ http://localhost:8080
 
 Confirm that the React application loads successfully.
 
-## 7. Prepare the Application Deployment Package
+## 8. Prepare the Application Deployment Package
 
 Elastic Beanstalk requires a source bundle containing the application files.
 
 ### Step 1: Stop the local server
 
-Press:
-
-```text
-Ctrl + C
-```
+Press `Ctrl + C`.
 
 ### Step 2: Generate the production build
 
@@ -368,7 +374,7 @@ package-lock.json
 
 The `tar.exe` command was used to create the final deployment package with compatible ZIP paths.
 
-## 8. Configure AWS Elastic Beanstalk
+## 9. Configure AWS Elastic Beanstalk
 
 ### Step 1: Open AWS Elastic Beanstalk
 
@@ -418,7 +424,7 @@ This configuration avoids creating a load balancer and is suitable for a small d
 
 Actual costs and free-tier eligibility depend on your AWS account, instance type, and current pricing.
 
-## 9. Configure IAM Roles
+## 10. Configure IAM Roles
 
 Elastic Beanstalk requires IAM roles to manage the environment and provide permissions to the EC2 instance.
 
@@ -463,7 +469,7 @@ Select the appropriate service role and EC2 instance profile in the Elastic Bean
 
 **Security note:** Use least-privilege permissions where practical. This project is a web server environment and does not require worker-tier or multicontainer Docker functionality.
 
-## 10. Configure Networking and Instance Capacity
+## 11. Configure Networking and Instance Capacity
 
 ### Networking
 
@@ -497,7 +503,7 @@ The EC2 instance needs network connectivity to receive application traffic and r
 
 Review the configuration and create the environment.
 
-## 11. Deploy the Application
+## 12. Deploy the Application
 
 After submitting the configuration, AWS Elastic Beanstalk provisions the environment.
 
@@ -527,7 +533,7 @@ Green / Ok
 
 Confirm that the enhanced React webpage loads successfully.
 
-## 12. Redeploy an Updated Application Version
+## 13. Redeploy an Updated Application Version
 
 If the webpage or application code is updated, generate a new production build and deployment package.
 
@@ -564,7 +570,7 @@ react-eb-app-v2
 
 Use a different version label for every new deployment.
 
-## 13. Troubleshooting
+## 14. Troubleshooting
 
 ### Issue 1: npm is not recognized or PowerShell blocks npm.ps1
 
@@ -653,7 +659,7 @@ Ensure the paths use forward slashes.
 4. Review `eb-engine.log` and application logs.
 5. Check the npm installation and application startup errors.
 
-## 14. AWS Resource Cleanup
+## 15. AWS Resource Cleanup
 
 After completing the project and testing the application, terminate the Elastic Beanstalk environment to avoid ongoing infrastructure charges.
 
@@ -684,7 +690,7 @@ The local project files remain on your computer even after terminating the AWS e
 
 To deploy the application again, repeat the Elastic Beanstalk environment setup and upload a valid application ZIP package.
 
-## 15. Final Project Outcome
+## 16. Final Project Outcome
 
 Successfully developed and deployed a responsive React web application on AWS Elastic Beanstalk using Node.js and Express.js.
 
